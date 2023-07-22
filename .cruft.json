@@ -1,0 +1,19 @@
+{
+  "template": "https://github.com/joaompinto/PythonCookiecutter",
+  "commit": "da75d163b8874c48947ea2b36afadc98ce0e6c51",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "directory_name": "lxcraft",
+      "package_name": "lxcraft",
+      "author_name": "João Pinto",
+      "author_email": "lamego.pinto@gmail.com",
+      "repository_url": "https://github.com/joaompinto/lxcraft",
+      "_copy_without_render": [
+        "*.yaml"
+      ],
+      "_template": "https://github.com/joaompinto/PythonCookiecutter"
+    }
+  },
+  "directory": null
+}
