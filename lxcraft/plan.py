@@ -14,15 +14,17 @@ class Plan:
                 action_list.append(action)
         return action_list
 
-    def run(self, action_list=None):
+    def run(self):
         """Run the plan"""
-        if action_list is None:
-            action_list = self.preview()
-
+        action_list = self.preview()
         if not action_list:
-            return []
+            return
 
         for action in action_list:
             action()
 
-        return action_list
+        # run the preview to make suse
+        post_run_preview = self.preview()
+        assert len(post_run_preview) == 0
+
+        return post_run_preview

@@ -9,6 +9,6 @@ from lxcraft import Plan
 from lxcraft.debian import APTPackages
 
 Plan("ensure nginx is installed", [
-    APTPackages(["nginx"], must_be_installed=True)
+    APTPackages(["nginx"], must_be_present=True)
 ]).run()
 ```

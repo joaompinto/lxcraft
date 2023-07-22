@@ -9,26 +9,25 @@ class APTPackages:
     """List of packages that must be installed"""
 
     package_list: list[str]
-    must_be_installed: bool = True
-
-    def is_installed(selfl, package_name: str):
-        rc, _ = getstatusoutput(f"dpkg -s {package_name}")
-        return rc == 0
+    must_be_present: bool = True
 
     def get_action(self):
         package_list = []
         for package in self.package_list:
-            if self.is_installed(package):
-                if self.must_be_installed:
-                    continue
-            else:
-                if not self.must_be_installed:
-                    continue
+            if self.must_be_present and is_installed(package):
+                continue
+            if not self.must_be_present and not is_installed(package):
+                continue
             package_list.append(package)
         if not package_list:
-            return None
-        action = "install" if self.must_be_installed else "remove"
+            return
+        action = "install" if self.must_be_present else "remove"
         return partial(package_action, action, " ".join(package_list))
+
+
+def is_installed(package_name: str):
+    rc, _ = getstatusoutput(f"dpkg -s {package_name}")
+    return rc == 0
 
 
 def package_action(action: str, package_list: str):

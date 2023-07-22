@@ -1,23 +1,23 @@
 from lxcraft import Plan
 from lxcraft.debian import APTPackages
+from lxcraft.debian.package import is_installed
 
 
 def test_package_install():
-    plan = Plan(
-        "ensure nginx is uninstalled", [APTPackages(["nginx"], must_be_installed=False)]
-    )
-    plan.run()
-    assert len(plan.preview()) == 0
+    Plan(
+        "ensure nginx is installed", [APTPackages(["nginx"], must_be_present=True)]
+    ).run()
+    assert is_installed("nginx")
 
-    # re-running should trigger 0 actions
-    assert len(plan.run()) == 0
 
-    plan = Plan(
-        "ensure nginx is installed", [APTPackages(["nginx"], must_be_installed=True)]
-    )
+def test_package_remove():
+    Plan(
+        "ensure nginx is uninstalled", [APTPackages(["nginx"], must_be_present=False)]
+    ).run()
+    assert not is_installed("nginx")
 
-    # something was executed
-    assert len(plan.run()) == 1
 
-    # nothing should be pending after running the plan
-    assert len(plan.preview()) == 0
+def test_package_install_multiple():
+    test_package_remove()
+    test_package_install()
+    test_package_remove()
