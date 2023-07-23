@@ -4,4 +4,6 @@
 
 Features:
 
-  - added develop/docker.sh to setup a development environment
+  - added develop/docker-bash to setup a development environment
+  - added FileContent to manage file contents
+  - added PipPackages to manage pip packages
