@@ -17,3 +17,8 @@ Plan("ensure nginx is installed", [
 ## How to develop
 
 In order to develop you must use Linux or WSL with docker.
+
+```sh
+develop/docker.sh # Enter the development docker instance
+just    # Run the tests
+```

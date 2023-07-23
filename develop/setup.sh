@@ -8,9 +8,8 @@ export MAMBA_ROOT_PREFIX=~/micromamba
 mkdir -p $MAMBA_ROOT_PREFIX
 micromamba shell init -s bash -p $MAMBA_ROOT_PREFIX
 source ~/.bashrc
-micromamba activate
 micromamba config append channels conda-forge
-micromamba install -y python=3.11
+micromamba -n base install -y python=3.11
 cd /workspace
 echo micromamba activate base >> ~/.bashrc
-bash -l
+bash
