@@ -16,4 +16,4 @@ jobs:
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
             bash /work/develop/setup.sh
-            just test
+            source ~/.bashrc && cd /work && just test
