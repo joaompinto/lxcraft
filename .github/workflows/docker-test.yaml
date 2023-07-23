@@ -11,8 +11,9 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: addnab/docker-run-action@v3
-        image: debian:12
-        options: -v ${{ github.workspace }}:/work -w /work
-        run: |
-          /work/develop/setup.sh
-          just test
+        with:
+          image: debian:12
+          options: -v ${{ github.workspace }}:/work -w /work
+          run: |
+            /work/develop/setup.sh
+            just test
