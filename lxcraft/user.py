@@ -7,13 +7,13 @@ from functools import partial
 @dataclass
 class User:
     username: str
-    gecos: str = None
-    password: str = None
+    gecos: str | None = None
+    password: str | None = None
     shell: str = "/usr/sbin/nologin"
-    home: str = None
-    uid: int = None
-    gid: int = None
-    groups: list = field(default_factory=list)
+    home: str | None = None
+    uid: int | None = None
+    gid: int | None = None
+    groups: list | None = field(default_factory=list)
     create_home: bool = True
     must_be_present: bool = True
 
@@ -25,17 +25,17 @@ class User:
 
     def create_user(self):
         cmd = f"useradd {self.username}"
-        if self.gecos:
+        if self.gecos is not None:
             cmd += f" -c {self.gecos}"
-        if self.password:
+        if self.password is not None:
             cmd += f" -p {self.password}"
-        if self.shell:
+        if self.shell is not None:
             cmd += f" -s {self.shell}"
-        if self.home:
+        if self.home is not None:
             cmd += f" -d {self.home}"
-        if self.uid:
+        if self.uid is not None:
             cmd += f" -u {self.uid}"
-        if self.gid:
+        if self.gid is not None:
             cmd += f" -g {self.gid}"
         if self.groups:
             cmd += f" -G {','.join(self.groups)}"

@@ -7,3 +7,8 @@ write_to = "lxcraft/version.py"
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+exclude = ['build']
+ignore_missing_imports = true
+check_untyped_defs = true

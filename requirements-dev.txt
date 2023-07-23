@@ -5,3 +5,4 @@ pytest
 setuptools_scm
 tox
 wheel
+mypy

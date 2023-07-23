@@ -1,4 +1,7 @@
+import sys
 from dataclasses import dataclass, field
+
+from .base import BaseAction
 
 
 @dataclass
@@ -7,7 +10,7 @@ class Plan:
     elements: list = field(default_factory=list)  # List of plan elements
 
     def preview(self):
-        action_list: list = []
+        action_list: list[BaseAction] = []
         for element in self.elements:
             action = element.get_action()
             if action is not None:
@@ -25,6 +28,10 @@ class Plan:
 
         # run the preview to make suse
         post_run_preview = self.preview()
-        assert len(post_run_preview) == 0
+        if post_run_preview:
+            print("Pending actions after run:", file=sys.stderr)
+            for action in post_run_preview:
+                print(" - ", action, file=sys.stderr)
+            raise Exception("Plan did not run successfully - check previous errors")
 
         return post_run_preview
