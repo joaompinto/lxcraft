@@ -1,7 +1,6 @@
 import os
 import shutil
 from dataclasses import dataclass
-from functools import partial
 from pathlib import Path
 
 
@@ -12,11 +11,11 @@ class Directory:
     path: str
     must_not_exist: bool = False
 
-    def get_action(self):
+    def get_actions(self):
         if self.must_not_exist and Path(self.path).exists():
-            return partial(self.rmtree)
+            return [self.rmtree]
         elif not self.must_not_exist and not Path(self.path).exists():
-            return partial(self.makedirs)
+            return [self.makedirs]
 
     def rmtree(self):
         shutil.rmtree(self.path)

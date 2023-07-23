@@ -1,8 +1,7 @@
 black
-ruff
+mypy
 pre-commit
 pytest
+ruff
 setuptools_scm
-tox
 wheel
-mypy

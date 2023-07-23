@@ -5,8 +5,8 @@ install-dependencies:
     pip install -r requirements-dev.txt
 
 test:
-    python -m pytest
+    python -m pytest -x
     python -m mypy .
 
 test-only filter:
-    python -m pytest -v -s -k {{filter}}
+    python -m pytest -x -v -s -k {{filter}}

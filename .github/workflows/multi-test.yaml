@@ -3,7 +3,7 @@ on: push
 
 jobs:
   build:
-    name: Tox test
+    name: just test
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: extractions/setup-just@v1
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -22,9 +24,5 @@ jobs:
       - name: Upgrage core dependencies
         run: sudo python -m pip install --upgrade pip setuptools wheel
 
-      - name: Install Tox and any other packages
-        run: sudo pip install tox
-
-      - name: Run Tox
-        # Run tox using the version of Python in `PATH`
-        run: sudo tox -e py
+      - name: Run test
+        run: sudo just test

@@ -10,12 +10,14 @@ class Plan:
     elements: list = field(default_factory=list)  # List of plan elements
 
     def preview(self):
-        action_list: list[BaseAction] = []
+        total_action_list: list[BaseAction] = []
         for element in self.elements:
-            action = element.get_action()
-            if action is not None:
-                action_list.append(action)
-        return action_list
+            action_list = element.get_actions()
+            if not action_list:
+                continue
+            for action in action_list:
+                total_action_list.append(action)
+        return total_action_list
 
     def run(self):
         """Run the plan"""

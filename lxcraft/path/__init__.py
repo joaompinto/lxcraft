@@ -1,4 +1,4 @@
 from .directory import Directory
-from .files import File
+from .filecontent import FileContent
 
-__all__ = ["Directory", "File"]
+__all__ = ["Directory", "FileContent"]

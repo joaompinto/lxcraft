@@ -6,7 +6,6 @@
         "dist": true,
         ".pytest_cache": true,
         ".ruff_cache": true,
-        ".tox": true,
         "lxcraft/version.py": true
     },
     "python.linting.pylintEnabled": false,

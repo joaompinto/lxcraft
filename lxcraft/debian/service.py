@@ -10,5 +10,5 @@ class SystemdService:
     must_reread: bool = True
     must_update: bool = True
 
-    def get_action(self):
-        return
+    def get_actions(self):
+        return []

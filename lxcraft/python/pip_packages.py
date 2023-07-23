@@ -11,7 +11,7 @@ class PipPackages:
     package_list: list[str]
     must_be_present: bool = True
 
-    def get_action(self):
+    def get_actions(self):
         package_list = []
         for package in self.package_list:
             if self.must_be_present and is_installed(package):
@@ -22,7 +22,7 @@ class PipPackages:
         if not package_list:
             return
         action = "install" if self.must_be_present else "uninstall -y "
-        return partial(package_action, action, " ".join(package_list))
+        return [partial(package_action, action, " ".join(package_list))]
 
 
 def is_installed(package_name: str):

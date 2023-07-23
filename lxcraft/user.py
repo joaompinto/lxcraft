@@ -1,7 +1,6 @@
 import os
 import pwd
 from dataclasses import dataclass, field
-from functools import partial
 
 
 @dataclass
@@ -17,11 +16,11 @@ class User:
     create_home: bool = True
     must_be_present: bool = True
 
-    def get_action(self):
+    def get_actions(self):
         if self.must_be_present and not user_exists(self.username):
-            return partial(self.create_user)
+            return [self.create_user]
         if not self.must_be_present and user_exists(self.username):
-            return partial(self.remove_user)
+            return [self.remove_user]
 
     def create_user(self):
         cmd = f"useradd {self.username}"
