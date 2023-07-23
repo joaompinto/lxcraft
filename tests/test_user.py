@@ -1,15 +1,22 @@
 from lxcraft import Plan, User
 from lxcraft.user import user_exists
 
+USERNAME = "lxcraft"
+
 
 def test_user_remove():
     Plan(
-        "ensure the user is not present", [User("lxcraf", must_be_present=False)]
+        "ensure the user is not present", [User(USERNAME, must_be_present=False)]
     ).run()
-    assert not user_exists("lxcraf")
+    assert not user_exists(USERNAME)
 
 
 def test_user_add():
-    assert not user_exists("lxcraf")
-    Plan("ensure the user is not present", [User("lxcraf", must_be_present=True)]).run()
-    assert user_exists("lxcraf")
+    Plan("ensure the user is not present", [User(USERNAME)]).run()
+    assert user_exists(USERNAME)
+
+
+def test_user_mutiple():
+    test_user_remove()
+    test_user_add()
+    test_user_remove()
