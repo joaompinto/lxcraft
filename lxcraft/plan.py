@@ -26,7 +26,11 @@ class Plan:
             return
 
         for action in action_list:
-            action()
+            try:
+                action()
+            except Exception as e:
+                print(action, file=sys.stderr)
+                raise e
 
         # run the preview to make suse
         post_run_preview = self.preview()

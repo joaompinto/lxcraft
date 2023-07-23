@@ -9,4 +9,4 @@ docker \
     -v $HOME/.gitconfig:/root/.gitconfig \
     -v $HOME/.ssh:/root/.ssh \
     -it debian:12 \
-    $(pwd)/develop/setup.sh $(pwd)
+    $(pwd)/develop/setup.sh $(pwd )

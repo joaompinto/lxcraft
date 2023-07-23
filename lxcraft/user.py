@@ -14,13 +14,10 @@ class User:
     gid: int | None = None
     groups: list | None = field(default_factory=list)
     create_home: bool = True
-    must_be_present: bool = True
 
     def get_actions(self):
-        if self.must_be_present and not user_exists(self.username):
+        if not user_exists(self.username):
             return [self.create_user]
-        if not self.must_be_present and user_exists(self.username):
-            return [self.remove_user]
 
     def create_user(self):
         cmd = f"useradd {self.username}"

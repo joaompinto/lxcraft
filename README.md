@@ -10,7 +10,7 @@ from lxcraft import Plan
 from lxcraft.debian import APTPackages
 
 Plan("ensure nginx is installed", [
-    APTPackages(["nginx"], must_be_present=True)
+    APTPackages(["nginx"])
 ]).run()
 ```
 
@@ -19,6 +19,6 @@ Plan("ensure nginx is installed", [
 In order to develop you must use Linux or WSL with docker.
 
 ```sh
-develop/docker.sh # Enter the development docker instance
-just    # Run the tests
+develop/docker-bash     # Enter the development docker instance
+just                    # Run the tests
 ```

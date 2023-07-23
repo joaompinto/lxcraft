@@ -18,26 +18,31 @@ class FileContent(BaseAction):
     mode: int = 0o644
     replace: dict = field(default_factory=dict)
 
+    def get_source_text(self):
+        replaced_text = Path(self.source_path).read_text()
+        for key, value in self.replace.items():
+            replaced_text = replaced_text.replace(key, value)
+        return replaced_text
+
     def content_differs(self):
-        source_text = Path(self.source_path).read_text()
         try:
             target_text = Path(self.target_path).read_text()
         except FileNotFoundError:
             return True
-        return source_text != target_text
+        return self.get_source_text() != target_text
 
     def owner_differs(self):
-        if (
-            self.owner_user
-            and pwd.getpwnam(self.owner_user).pw_uid
-            != Path(self.target_path).stat().st_uid
-        ):
+        if not self.owner_user and not self.owner_group:
+            return False
+
+        try:
+            current_uid = Path(self.target_path).stat().st_uid
+            current_gid = Path(self.target_path).stat().st_gid
+        except FileNotFoundError:  # The target file is not yet on the system
             return True
-        if (
-            self.owner_group
-            and grp.getgrnam(self.owner_group).gr_gid
-            != Path(self.target_path).stat().st_gid
-        ):
+        if self.owner_user and pwd.getpwnam(self.owner_user).pw_uid != current_uid:
+            return True
+        if self.owner_group and grp.getgrnam(self.owner_group).gr_gid != current_gid:
             return True
 
     def mode_differs(self):
@@ -56,8 +61,7 @@ class FileContent(BaseAction):
         )
 
     def create(self):
-        text = Path(self.source_path).read_text()
-        Path(self.target_path).write_text(text)
+        Path(self.target_path).write_text(self.get_source_text())
 
     def chown(self):
         os.chown(
