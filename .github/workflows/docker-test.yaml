@@ -15,5 +15,5 @@ jobs:
           image: debian:12
           options: -v ${{ github.workspace }}:/work -w /work
           run: |
-            /work/develop/setup.sh
+            bash /work/develop/setup.sh
             just test
