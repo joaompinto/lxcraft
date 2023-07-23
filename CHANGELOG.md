@@ -1,8 +1,8 @@
 # CHANGELOG.md
 
-## 0.0.2 (unreleased)
+## 0.0.2 (23.Jul.2023)
 
-Features:
+Changes:
 
   - added develop/docker-bash to setup a development environment
   - added FileContent to manage file contents
