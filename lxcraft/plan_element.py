@@ -19,3 +19,8 @@ class PlanElement:
             if key_value:
                 action_list.append(value)
         return action_list
+
+    def set_plan(self, plan):
+        if "plan" in self.__dict__:
+            raise Exception("PlanElement already has a plan")
+        self.plan = plan

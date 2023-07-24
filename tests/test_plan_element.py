@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+import pytest
+
 import lxcraft
 
 
@@ -40,3 +42,6 @@ def test_plan_element():
 
         plan.execute()
         plan.execute()
+
+    with pytest.raises(Exception, match=r"already has a plan"):
+        lxcraft.Plan(element)
