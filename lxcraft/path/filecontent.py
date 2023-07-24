@@ -12,14 +12,29 @@ class FileContent(lxcraft.PlanElement):
     """Create file with content"""
 
     target_path: str
-    source_path: str
+    source_path: str = ""
     owner_user: str = ""
     owner_group: str = ""
     mode: int = 0o644
     replace: dict = field(default_factory=dict)
+    templates_directory = "templates"
+
+    @staticmethod
+    def set_templates_directory(directory: str):
+        FileContent.templates_directory = directory
 
     def get_source_text(self):
-        replaced_text = Path(self.source_path).read_text()
+        if self.source_path:
+            source_path = Path(self.source_path)
+        else:
+            filename = Path(self.target_path).name
+            source_path = Path(self.templates_directory) / filename
+        if source_path.exists():
+            source_text = source_path.read_text()
+        else:
+            raise FileNotFoundError(f"Source file {source_path} not found")
+
+        replaced_text = source_text
         for key, value in self.replace.items():
             replaced_text = replaced_text.replace(key, value)
         return replaced_text

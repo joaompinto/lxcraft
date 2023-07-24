@@ -11,3 +11,5 @@ Improvements:
     - added `PlanElement` class
     - added one or list of Elements
     - rename .run() to .execute()
+  - FileContent:
+    - added support for search in the templates dir

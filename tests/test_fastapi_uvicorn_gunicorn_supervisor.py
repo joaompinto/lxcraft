@@ -16,13 +16,11 @@ def test_fastapi_uvicorn_gunicorn_supervisor():
         Directory(f"/run/user/{USERNAME}"),
         FileContent(
             f"/home/{USERNAME}/main.py",
-            "tests/template/main.py",
             owner_user=USERNAME,
             owner_group=USERNAME,
         ),
         FileContent(
             f"/etc/supervisor/conf.d/{USERNAME}.conf",
-            f"tests/template/{USERNAME}.conf",
             replace={"{USER}": USERNAME},
         ),
     ]

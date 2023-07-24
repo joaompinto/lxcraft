@@ -20,7 +20,6 @@ class Plan:
             assert isinstance(
                 element, PlanElement
             ), f"{element} is not based on PlanElement"
-            element.set_plan(self)
 
     def __enter__(self):
         return self
