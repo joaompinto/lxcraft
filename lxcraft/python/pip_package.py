@@ -30,3 +30,7 @@ class PipPackages(lxcraft.PlanElement):
     def is_installed(package_name: str):
         rc, _ = getstatusoutput(f"pip show {package_name}")
         return rc == 0
+
+    def destroy(self):
+        package_list = " ".join(self.missing_package_list)
+        os.system(f"pip uninstall -y {package_list}")

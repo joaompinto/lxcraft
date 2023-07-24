@@ -11,13 +11,6 @@ class PlanElement:
     def source_repr(self):
         return f"{self.location}:{self.lineno} # -> {self}"
 
-    def get_actions(self) -> list[Callable]:
-        """Return a list of actions to be executed"""
-        return []
-
-    def destroy(self):
-        pass
-
     @staticmethod
     def action_engine(action_dict: dict[Callable, Callable]) -> list[Callable]:
         action_list = []

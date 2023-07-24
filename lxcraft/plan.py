@@ -13,7 +13,7 @@ class Plan:
 
     # Check if all the elements are based on PlanElement to avoid type errors
     def __post_init__(self):
-        if isinstance(self.elements, PlanElement):
+        if not isinstance(self.elements, list):
             self.elements = [self.elements]
         assert self.elements, "Plan must have at least one element"
         for element in self.elements:
