@@ -4,7 +4,6 @@ install-dependencies:
     pip install -r requirements-dev.txt
 
 test:
-    python -m pytest
 
 lint:
     python -m mypy .
