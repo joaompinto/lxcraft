@@ -39,9 +39,11 @@ class User(PlanElement):
             cmd += f" -G {','.join(self.groups)}"
         if self.create_home:
             cmd += " -m"
-        os.system(cmd)
+        rc = os.system(cmd)
+        if rc != 0:
+            raise Exception(f"Command terminated with non zero exit code {rc}")
 
-    def remove_user(self):
+    def destroy(self):
         cmd = f"userdel -r {self.username}"
         os.system(cmd)
 

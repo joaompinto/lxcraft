@@ -11,12 +11,22 @@ class Plan:
         default_factory=list[PlanElement]
     )  # List of plan elements
 
+    # Check if all the elements are based on PlanElement to avoid type errors
     def __post_init__(self):
         if isinstance(self.elements, PlanElement):
             self.elements = [self.elements]
+        assert self.elements, "Plan must have at least one element"
         for element in self.elements:
-            if not isinstance(element, PlanElement):
-                raise Exception(f"{element} is not based on PlanElement")
+            assert isinstance(
+                element, PlanElement
+            ), f"{element} is not based on PlanElement"
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        for element in self.elements:
+            element.destroy()
 
     def preview(self):
         total_action_list: list[Callable] = []
@@ -39,7 +49,11 @@ class Plan:
             try:
                 action()
             except Exception as e:
-                print(action, file=sys.stderr)
+                print(
+                    "EXCEPTION related to ",
+                    action.__self__.source_repr(),
+                    file=sys.stderr,
+                )
                 raise e
 
         # run the preview to make suse

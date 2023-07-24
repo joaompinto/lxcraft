@@ -17,3 +17,6 @@ class Directory(lxcraft.PlanElement):
 
     def makedirs(self):
         os.makedirs(self.path, exist_ok=True)
+
+    def destroy(self):
+        os.removedirs(self.path)

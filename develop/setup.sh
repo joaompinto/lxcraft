@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+export PIP_ROOT_USER_ACTION=ignore
+
 apt update
 apt -y install curl bzip2 git
 MICROMAMBA_BIN=/usr/local/bin/micromamba

@@ -64,11 +64,18 @@ class FileContent(lxcraft.PlanElement):
         Path(self.target_path).write_text(self.get_source_text())
 
     def chown(self):
-        os.chown(
-            self.target_path,
-            pwd.getpwnam(self.owner_user).pw_uid,
-            grp.getgrnam(self.owner_group).gr_gid,
-        )
+        if self.owner_user == "":
+            uid = os.getuid()
+        else:
+            uid = pwd.getpwnam(self.owner_user).pw_uid
+        if self.owner_group == "":
+            gid = os.getgid()
+        else:
+            gid = grp.getgrnam(self.owner_group).gr_gid
+        os.chown(self.target_path, uid, gid)
 
     def chmod(self):
         os.chmod(self.target_path, self.mode)
+
+    def destroy(self):
+        os.remove(self.target_path)

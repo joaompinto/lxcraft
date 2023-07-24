@@ -1,14 +1,22 @@
+import inspect
 from typing import Callable
 
 
 class PlanElement:
-    def on_change(self, action):
-        self.action = action
-        return self
+    def __post_init__(self):
+        callerframerecord = inspect.stack()[2]  # 0
+        self.location = callerframerecord.filename
+        self.lineno = callerframerecord.lineno
+
+    def source_repr(self):
+        return f"{self.location}:{self.lineno} # -> {self}"
 
     def get_actions(self) -> list[Callable]:
         """Return a list of actions to be executed"""
         return []
+
+    def destroy(self):
+        pass
 
     @staticmethod
     def action_engine(action_dict: dict[Callable, Callable]) -> list[Callable]:
@@ -18,10 +26,3 @@ class PlanElement:
             if key_value:
                 action_list.append(value)
         return action_list
-
-    # __iter__ and __next__ are required for the for loop
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        return StopIteration

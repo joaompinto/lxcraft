@@ -1,6 +1,5 @@
 import os
 from dataclasses import dataclass
-from functools import partial
 from subprocess import getstatusoutput
 
 import lxcraft
@@ -13,22 +12,21 @@ class PipPackages(lxcraft.PlanElement):
     package_list: list[str]
 
     def get_actions(self):
-        package_list = []
+        self.missing_package_list = []
         for package in self.package_list:
-            if is_installed(package):
+            if self.is_installed(package):
                 continue
-            package_list.append(package)
-        if not package_list:
-            return
-        return [partial(package_action, " ".join(package_list))]
+            self.missing_package_list.append(package)
+        if self.missing_package_list:
+            return self.install_missing()
 
+    def install_missing(self):
+        package_list = " ".join(self.missing_package_list)
+        rc = os.system(f"pip install {package_list}")
+        if rc != 0:
+            raise Exception(f"Command terminated with non zero exit code {rc}")
 
-def is_installed(package_name: str):
-    rc, _ = getstatusoutput(f"pip show {package_name}")
-    return rc == 0
-
-
-def package_action(package_list: str):
-    rc = os.system(f"pip install {package_list}")
-    if rc != 0:
-        raise Exception(f"Command terminated with non zero exit code {rc}")
+    @staticmethod
+    def is_installed(package_name: str):
+        rc, _ = getstatusoutput(f"pip show {package_name}")
+        return rc == 0

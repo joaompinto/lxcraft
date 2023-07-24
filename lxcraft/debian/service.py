@@ -9,6 +9,3 @@ class SystemdService:
     must_be_enabled: bool = True
     must_reread: bool = True
     must_update: bool = True
-
-    def get_actions(self):
-        return []

@@ -5,6 +5,7 @@
 
 Improvements:
 
+  - Added coverage report (100% on this version)
   - Plan:
     - removed 'name' attribute
     - added `PlanElement` class
