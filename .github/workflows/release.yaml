@@ -9,7 +9,8 @@ jobs:
     name: Build and publish Python 🐍 distributions 📦 to TestPyPI and PyPI
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      id-token: write # Need to publish to PyPI
+      contents: write # Needed to create a release
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

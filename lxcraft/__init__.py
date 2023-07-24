@@ -1,4 +1,4 @@
 from .plan import Plan
-from .user import User
+from .plan_element import PlanElement
 
-__all__ = ["Plan", "User"]
+__all__ = ["Plan", "PlanElement"]

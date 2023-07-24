@@ -1,3 +1,3 @@
-from .pip_packages import PipPackages
+from .pip_package import PipPackages
 
 __all__ = ["PipPackages"]

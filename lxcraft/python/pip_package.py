@@ -3,9 +3,11 @@ from dataclasses import dataclass
 from functools import partial
 from subprocess import getstatusoutput
 
+import lxcraft
+
 
 @dataclass
-class PipPackages:
+class PipPackages(lxcraft.PlanElement):
     """List of packages that must be installed"""
 
     package_list: list[str]

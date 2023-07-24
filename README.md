@@ -7,11 +7,11 @@
 ## How to use
 ```python
 from lxcraft import Plan
-from lxcraft.debian import APTPackages
+from lxcraft.debian import AptPackages
 
-Plan("ensure nginx is installed", [
-    APTPackages(["nginx"])
-]).run()
+Plan([
+    AptPackages(["nginx"])
+]).execute()
 ```
 
 ## How to develop

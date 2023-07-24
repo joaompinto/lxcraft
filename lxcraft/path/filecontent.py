@@ -4,11 +4,11 @@ import pwd
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from lxcraft.base import BaseAction, action_engine
+import lxcraft
 
 
 @dataclass
-class FileContent(BaseAction):
+class FileContent(lxcraft.PlanElement):
     """Create file with content"""
 
     target_path: str
@@ -52,7 +52,7 @@ class FileContent(BaseAction):
             return True
 
     def get_actions(self):
-        return action_engine(
+        return self.action_engine(
             {
                 self.content_differs: self.create,
                 self.owner_differs: self.chown,

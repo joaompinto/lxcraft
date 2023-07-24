@@ -45,6 +45,6 @@ repos:
     -   id: run-just
         name: Run tests using just
         entry:
-            just test
+            just all
         language: system
         pass_filenames: false

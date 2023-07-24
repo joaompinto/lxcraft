@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-from lxcraft import Plan, User
-from lxcraft.debian import APTPackages
+from lxcraft import Plan
+from lxcraft.debian import AptPackages
 from lxcraft.path import Directory, FileContent
 from lxcraft.python import PipPackages
+from lxcraft.user import User
 
 USERNAME = "wwwkindos"
 
@@ -10,7 +11,7 @@ USERNAME = "wwwkindos"
 def test_fastapi_uvicorn_gunicorn_supervisor():
     plan_components = [
         PipPackages(["fastapi", "uvicorn", "gunicorn"]),
-        APTPackages(["supervisor"]),
+        AptPackages(["supervisor"]),
         User(USERNAME),
         Directory(f"/run/user/{USERNAME}"),
         FileContent(
@@ -25,4 +26,4 @@ def test_fastapi_uvicorn_gunicorn_supervisor():
             replace={"{USER}": USERNAME},
         ),
     ]
-    Plan("my-plan", plan_components).run()
+    Plan(plan_components).execute()

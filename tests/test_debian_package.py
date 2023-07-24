@@ -1,12 +1,12 @@
 import os
 
 from lxcraft import Plan
-from lxcraft.debian import APTPackages
+from lxcraft.debian import AptPackages
 
 
 def test_package_install():
-    Plan("ensure nginx is installed", [APTPackages(["nginx"])]).run()
-    assert APTPackages.is_installed("nginx")
+    Plan([AptPackages(["nginx"])]).execute()
+    assert AptPackages.is_installed("nginx")
 
 
 def test_package_install_multiple():

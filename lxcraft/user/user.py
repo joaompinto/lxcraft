@@ -2,9 +2,11 @@ import os
 import pwd
 from dataclasses import dataclass, field
 
+from lxcraft import PlanElement
+
 
 @dataclass
-class User:
+class User(PlanElement):
     username: str
     gecos: str | None = None
     password: str | None = None

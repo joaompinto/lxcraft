@@ -7,7 +7,7 @@ DIRNAME = "/run/user/www-data"
 
 
 def test_directory_create():
-    Plan("ensure the directory is present", [Directory(DIRNAME)]).run()
+    Plan([Directory(DIRNAME)]).execute()
     assert Path(DIRNAME).is_dir()
 
 

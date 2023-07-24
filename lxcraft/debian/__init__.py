@@ -1,4 +1,4 @@
-from .package import APTPackages
+from .apt_package import AptPackages
 from .service import SystemdService
 
-__all__ = ["APTPackages", "SystemdService"]
+__all__ = ["AptPackages", "SystemdService"]

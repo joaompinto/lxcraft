@@ -2,9 +2,11 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+import lxcraft
+
 
 @dataclass
-class Directory:
+class Directory(lxcraft.PlanElement):
     """Directory to be created or removed"""
 
     path: str

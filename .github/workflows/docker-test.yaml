@@ -1,9 +1,9 @@
-name: Multi platform / version testing
+name: Run tests
 on: push
 
 jobs:
   build:
-    name: just test
+    name: just all
 
     runs-on: ubuntu-latest
 

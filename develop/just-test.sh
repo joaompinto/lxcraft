@@ -1,4 +1,4 @@
 #!/bin/bash
 set -eu
 source ~/.bashrc
-just test
+just all
