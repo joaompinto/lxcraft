@@ -1,4 +1,4 @@
-all: install-dependencies test lint
+all: install-dependencies test
 
 install-dependencies:
     pip install -r requirements-dev.txt
