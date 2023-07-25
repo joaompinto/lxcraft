@@ -19,3 +19,8 @@ class PlanElement:
             if key_value:
                 action_list.append(value)
         return action_list
+
+    def on_change(self, callback: Callable):
+        """Execute callback if the element is changed"""
+        self.on_change_callback = callback
+        return self

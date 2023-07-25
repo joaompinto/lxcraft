@@ -2,6 +2,8 @@ import sys
 from dataclasses import dataclass, field
 from typing import Callable
 
+from lxcraft.debug import debug
+
 from .plan_element import PlanElement
 
 
@@ -13,6 +15,7 @@ class Plan:
 
     # Check if all the elements are based on PlanElement to avoid type errors
     def __post_init__(self):
+        debug("plan", "Created plan", self)
         if not isinstance(self.elements, list):
             self.elements = [self.elements]
         assert self.elements, "Plan must have at least one element"
@@ -26,6 +29,7 @@ class Plan:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         for element in self.elements:
+            debug("destroy", "Destroying", element)
             element.destroy()
 
     def preview(self):
@@ -34,9 +38,16 @@ class Plan:
         for element in self.elements:
             action_list = element.get_actions()
             if not action_list:
+                debug("plan", "preview found no actions for", element)
                 continue
             for action in action_list:
                 total_action_list.append(action)
+
+            # Register on_change callback for the last action
+            on_change_callback = getattr(element, "on_change_callback", None)
+            if action and on_change_callback:
+                total_action_list.append(on_change_callback)
+            debug("plan", f"preview found {len(action_list)} actions")
         return total_action_list
 
     def execute(self):
@@ -46,6 +57,7 @@ class Plan:
             return
 
         for action in action_list:
+            debug("execute", action)
             try:
                 action()
             except Exception as e:
@@ -56,7 +68,7 @@ class Plan:
                 )
                 raise e
 
-        # run the preview to make suse
+        # run the preview to make sure everything is ok
         post_run_preview = self.preview()
         if post_run_preview:
             print("Pending actions after run:", file=sys.stderr)

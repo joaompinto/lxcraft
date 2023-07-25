@@ -32,4 +32,5 @@ class AptPackages(lxcraft.PlanElement):
         return rc == 0
 
     def destroy(self):
-        os.system(f"apt remove -y {' '.join(self.package_list)}")
+        if self.missing_package_list:
+            os.system(f"apt remove -y {' '.join(self.missing_package_list)}")

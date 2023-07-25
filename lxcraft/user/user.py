@@ -44,7 +44,7 @@ class User(PlanElement):
             raise Exception(f"Command terminated with non zero exit code {rc}")
 
     def destroy(self):
-        cmd = f"userdel -r {self.username}"
+        cmd = f"userdel {self.username}"
         os.system(cmd)
 
 

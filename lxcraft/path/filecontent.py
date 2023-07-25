@@ -76,6 +76,7 @@ class FileContent(lxcraft.PlanElement):
         )
 
     def create(self):
+        lxcraft.debug("filecontent", "Creating", self.target_path)
         Path(self.target_path).write_text(self.get_source_text())
 
     def chown(self):

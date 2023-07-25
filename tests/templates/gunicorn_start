@@ -1,0 +1,22 @@
+#!/bin/bash
+
+NAME=fastapi-app
+DIR=/home/{USERNAME}
+USER={USERNAME}
+GROUP={USERNAME}
+WORKERS=3
+WORKER_CLASS=uvicorn.workers.UvicornWorker
+BIND=unix:$DIR/run/gunicorn.sock
+LOG_LEVEL=error
+
+cd $DIR
+
+exec gunicorn main:app \
+    --name $NAME \
+    --workers $WORKERS \
+    --worker-class $WORKER_CLASS \
+    --user=$USER \
+    --group=$GROUP \
+    --bind=$BIND \
+    --log-level=$LOG_LEVEL \
+    --log-file=-

@@ -33,4 +33,5 @@ class PipPackages(lxcraft.PlanElement):
 
     def destroy(self):
         package_list = " ".join(self.missing_package_list)
-        os.system(f"pip uninstall -y {package_list}")
+        if package_list:
+            os.system(f"pip uninstall -y {package_list}")

@@ -5,8 +5,8 @@ import pytest
 from lxcraft import Plan
 from lxcraft.path import FileContent
 
-FileContent.set_templates_directory("tests/template")
-SOURCE_PATH = "tests/template/test.txt"
+FileContent.set_templates_directory("tests/templates")
+SOURCE_PATH = "tests/templates/test.txt"
 TARGET_PATH = "/tmp/test.txt"
 
 
