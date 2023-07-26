@@ -31,9 +31,9 @@ class AptPackages(lxcraft.Resource):
     @staticmethod
     def is_installed(package_name: str):
         command = (
-            f"dpkg-query --showformat {package_name}"
-            " '${Status}' --show passwd | grep -q '^install ok installed$'"
+            "dpkg-query --showformat '${Status}'"
+            f" --show {package_name} | grep -q '^install ok installed$'"
         )
         rc, _ = getstatusoutput(command)
-        lxcraft.debug("command", rc, command)
+        lxcraft.debug("command", command, f"# rc={rc}")
         return rc == 0

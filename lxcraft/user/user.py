@@ -1,3 +1,4 @@
+import grp
 import pwd
 from dataclasses import dataclass, field
 
@@ -41,9 +42,12 @@ class User(lxcraft.Resource):
             return False
         if self.gid is not None and self.gid != user_data.pw_gid:
             return False
-        if self.groups is not None and self.groups != user_data.pw_gid:
+        if self.groups is not None and self.groups != self.current_user_groups():
             return False
         return True
+
+    def current_user_groups(self):
+        return [g.gr_name for g in grp.getgrall() if self.username in g.gr_mem]
 
     def create_user(self):
         cmd = f"useradd {self.username}"

@@ -46,6 +46,11 @@ def test_plan():
     # Test the context manager
     with lxcraft.Plan(MyTestresource()) as plan:
         plan.execute()
+        plan.destroy()
+
+    with lxcraft.Plan(MyTestresourceWithActions()) as plan:
+        plan.execute()
+        plan.destroy()
 
     lxcraft.Plan(MyTestresourceWithActions()).execute()
 

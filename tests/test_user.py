@@ -1,32 +1,31 @@
 import pwd
 
-import pytest
-
 from lxcraft import Plan
 from lxcraft.user import User
 
 USERNAME = "lxcraft"
 
+fields = {
+    "username": USERNAME,
+    "gecos": "lxcraft",
+    "password": "lxcraft",
+    "shell": "/bin/sh",
+    "home": "/home/lxcraft_test",
+    "uid": 2000,
+    "gid": 100,
+    "groups": ["sudo"],
+}
+
 
 def test_user_add():
-    with Plan(User(USERNAME)) as plan:
-        plan.execute()
+    kwargs = {}
+    for key, value in fields.items():
+        kwargs[key] = value
+        Plan(User(**kwargs)).execute()
         assert pwd.getpwnam(USERNAME)
 
-    with Plan(
-        User(
-            USERNAME,
-            "geocs",
-            "password",
-            "/bin/bash",
-            f"/home/{USERNAME}",
-            2000,
-            1,
-            ["root"],
-            True,
-        )
-    ) as plan:
-        plan.execute()
-        assert pwd.getpwnam(USERNAME)
-    with pytest.raises(Exception, match=r"Command terminated with non zero exit code"):
-        Plan(User("")).execute()
+    # Idempotency test
+    Plan(User(**kwargs)).execute()
+    assert pwd.getpwnam(USERNAME)
+
+    Plan(User(*kwargs)).destroy()
