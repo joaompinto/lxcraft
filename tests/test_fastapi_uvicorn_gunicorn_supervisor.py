@@ -4,7 +4,6 @@ import os
 from lxcraft import Plan
 from lxcraft.debian import AptPackages
 from lxcraft.path import Directory, FileContent
-from lxcraft.python import PipPackages
 from lxcraft.user import User
 
 USERNAME = "wwwkindos"
@@ -17,21 +16,21 @@ def custom_file(
         filename,
         owner_user=user,
         owner_group=group,
-        replace={"{USER}": USERNAME},
+        replace={"{USERNAME}": USERNAME},
         mode=mode,
-    ).on_change(supervisorctl_reload)
-
-
-def supervisorctl_reload():
-    os.system("supervisorctl reread && supervisorctl update")
+    )
 
 
 def test_fastapi_uvicorn_gunicorn_supervisor():
+    def supervisorctl_reload():
+        os.system("supervisorctl reread && supervisorctl update")
+
     plan_components = [
-        PipPackages(["fastapi", "uvicorn", "gunicorn"]),
-        AptPackages(["supervisor"]),
+        AptPackages(["systemctl", "supervisor"]),
+        AptPackages(["python3-fastapi", "uvicorn", "gunicorn"]),
         User(USERNAME),
         Directory(f"/run/user/{USERNAME}"),
+        Directory(f"/var/log/{USERNAME}/"),
         custom_file(f"/home/{USERNAME}/main.py"),
         custom_file(f"/home/{USERNAME}/gunicorn_start", mode=0o755),
         custom_file(

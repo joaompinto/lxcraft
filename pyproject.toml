@@ -13,7 +13,6 @@ exclude = ['build']
 ignore_missing_imports = true
 check_untyped_defs = true
 
-
 [tool.coverage.run]
 omit = [
     "lxcraft/version.py"
