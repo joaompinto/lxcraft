@@ -19,7 +19,7 @@ def custom_file(
         owner_group=group,
         replace={"{USER}": USERNAME},
         mode=mode,
-    )
+    ).on_change(supervisorctl_reload)
 
 
 def supervisorctl_reload():
