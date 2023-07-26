@@ -13,4 +13,4 @@ def test_pip_package():
         assert PipPackages.is_installed(TEST_PACKAGE)
 
     with pytest.raises(Exception, match=r"Command terminated with non zero exit code"):
-        Plan(PipPackages([".blaldderandom"])).execute()
+        Plan([PipPackages([".blaldderandom"])]).execute()

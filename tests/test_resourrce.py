@@ -20,10 +20,12 @@ class MyTestresourceWithAction(lxcraft.Resource):
         return True
 
 
-def test_plan_resource():
-    resource = MyTestresourceWithAction()
-    with lxcraft.Plan(resource) as plan:
-        assert resource.source_repr()
+def test_resource():
+    def change_callback():
+        pass
 
+    resource = MyTestresourceWithAction().on_change(change_callback)
+    assert resource.source_repr()
+    with lxcraft.Plan([resource]) as plan:
         plan.execute()
         plan.execute()

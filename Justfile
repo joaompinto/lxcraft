@@ -3,16 +3,16 @@ all: install-dependencies test
 install-dependencies:
     pip install -r requirements-dev.txt
 
-test:
+test: lint
     python -m pytest -x
 
 test-only filter:
     python -m pytest -x -v -s -k {{filter}}
 
-coverage:
+cover:
     python -m pytest -x --cov-report term-missing --cov=lxcraft tests
 
-coverage-only filter:
+cover-only filter:
     python -m pytest -x --cov-report term-missing --cov=lxcraft tests -k {{filter}}
 
 lint:
