@@ -6,7 +6,7 @@ import lxcraft
 
 @dataclass
 class Directory(lxcraft.Resource):
-    """Directory to be created or removed"""
+    """Directory in the filesystem"""
 
     path: str
 
