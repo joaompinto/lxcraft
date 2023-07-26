@@ -4,7 +4,7 @@ from typing import Callable
 
 class Resource:
     def __post_init__(self):
-        callerframerecord = inspect.stack()[2]  # 0
+        callerframerecord = inspect.stack()[2]
         self.location = callerframerecord.filename
         self.lineno = callerframerecord.lineno
 

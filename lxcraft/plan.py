@@ -31,17 +31,6 @@ class Plan:
             debug("destroy", "__exit__ Destroying", resource)
             resource.destroy()
 
-    def find_missing(self):
-        for resource in self.resources:
-            if not resource.is_created():
-                debug("missing", resource)
-                yield resource
-
-    def find_inconsistent(self):
-        for resource in self.resources:
-            if not resource.is_consistent():
-                yield resource
-
     def try_and_point(self, action: Callable):
         debug("action", "Trying to execute", action)
         try:
@@ -57,10 +46,9 @@ class Plan:
     def execute(self):
         """Execute all the actions required to create the resources
         and bring them to a consistent state"""
-        for resource in self.find_missing():
-            self.try_and_point(resource.create)
-
-        for resource in self.find_inconsistent():
-            debug("action", "recreate inconsistent", resource)
-            self.try_and_point(resource.destroy)
-            self.try_and_point(resource.create)
+        for resource in self.resources:
+            if not resource.is_created():
+                self.try_and_point(resource.create)
+            if not resource.is_consistent():
+                self.try_and_point(resource.destroy)
+                self.try_and_point(resource.create)
