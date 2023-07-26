@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -6,17 +5,19 @@ import lxcraft
 
 
 @dataclass
-class Directory(lxcraft.PlanElement):
+class Directory(lxcraft.Resource):
     """Directory to be created or removed"""
 
     path: str
 
-    def get_actions(self):
-        if not Path(self.path).exists():
-            return [self.makedirs]
-
-    def makedirs(self):
-        os.makedirs(self.path, exist_ok=True)
+    def create(self):
+        Path(self.path).mkdir(parents=True, exist_ok=True)
 
     def destroy(self):
-        os.removedirs(self.path)
+        Path(self.path).rmdir()
+
+    def is_created(self):
+        return Path(self.path).exists()
+
+    def is_consistent(self):
+        return Path(self.path).is_dir()

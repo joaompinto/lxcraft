@@ -1,12 +1,11 @@
-import os
 import pwd
 from dataclasses import dataclass, field
 
-from lxcraft import PlanElement
+import lxcraft
 
 
 @dataclass
-class User(PlanElement):
+class User(lxcraft.Resource):
     username: str
     gecos: str | None = None
     password: str | None = None
@@ -17,9 +16,34 @@ class User(PlanElement):
     groups: list | None = field(default_factory=list)
     create_home: bool = True
 
-    def get_actions(self):
-        if not user_exists(self.username):
-            return [self.create_user]
+    def create(self):
+        self.create_user()
+
+    def destroy(self):
+        lxcraft.system(f"userdel {self.username}")
+
+    def is_created(self):
+        try:
+            pwd.getpwnam(self.username)
+        except KeyError:
+            return False
+        return True
+
+    def is_consistent(self):
+        user_data = pwd.getpwnam(self.username)
+        if self.gecos is not None and self.gecos != user_data.pw_gecos:
+            return False
+        if self.shell is not None and self.shell != user_data.pw_shell:
+            return False
+        if self.home is not None and self.home != user_data.pw_dir:
+            return False
+        if self.uid is not None and self.uid != user_data.pw_uid:
+            return False
+        if self.gid is not None and self.gid != user_data.pw_gid:
+            return False
+        if self.groups is not None and self.groups != user_data.pw_gid:
+            return False
+        return True
 
     def create_user(self):
         cmd = f"useradd {self.username}"
@@ -39,18 +63,4 @@ class User(PlanElement):
             cmd += f" -G {','.join(self.groups)}"
         if self.create_home:
             cmd += " -m"
-        rc = os.system(cmd)
-        if rc != 0:
-            raise Exception(f"Command terminated with non zero exit code {rc}")
-
-    def destroy(self):
-        cmd = f"userdel {self.username}"
-        os.system(cmd)
-
-
-def user_exists(username: str):
-    try:
-        pwd.getpwnam(username)
-    except KeyError:
-        return False
-    return True
+        lxcraft.system(cmd)

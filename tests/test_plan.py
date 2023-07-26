@@ -5,41 +5,49 @@ import pytest
 import lxcraft
 
 
-class MyTestElement(lxcraft.PlanElement):
-    def get_actions(self):
+class MyTestresource(lxcraft.Resource):
+    def create(self):
         pass
 
     def destroy(self):
         pass
 
+    def is_created(self):
+        pass
+
+    def is_consistent(self):
+        pass
+
 
 @dataclass
-class MyTestElementWithActions(lxcraft.PlanElement):
+class MyTestresourceWithActions(lxcraft.Resource):
     raise_exeception: bool = False
-    completed: bool = False
-    always_run: bool = False
+    was_created: bool = False
 
-    def get_actions(self):
-        if not self.completed or self.always_run:
-            return [self.hello]
-
-    def hello(self):
+    def create(self):
         if self.raise_exeception:
-            raise Exception("TestElementWithActionsException")
-        self.completed = True
+            raise Exception("TestresourceWithActionsException")
+        self.was_created = True
+
+    def destroy(self):
+        pass
+
+    def is_created(self):
+        return self.was_created
+
+    def is_consistent(self):
+        return True
 
 
 def test_plan():
-    with pytest.raises(Exception, match=r"is not based on PlanElement"):
+    with pytest.raises(Exception, match=r"is not based on Resource"):
         lxcraft.Plan("text")
 
     # Test the context manager
-    with lxcraft.Plan(MyTestElement()) as plan:
+    with lxcraft.Plan(MyTestresource()) as plan:
         plan.execute()
 
-    lxcraft.Plan(MyTestElementWithActions()).execute()
+    lxcraft.Plan(MyTestresourceWithActions()).execute()
 
-    with pytest.raises(Exception, match=r"TestElementWithActionsException"):
-        lxcraft.Plan(MyTestElementWithActions(raise_exeception=True)).execute()
-    with pytest.raises(Exception, match=r"Plan did not run successfully"):
-        lxcraft.Plan(MyTestElementWithActions(always_run=True)).execute()
+    with pytest.raises(Exception, match=r"TestresourceWithActionsException"):
+        lxcraft.Plan(MyTestresourceWithActions(raise_exeception=True)).execute()

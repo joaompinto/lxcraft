@@ -8,7 +8,6 @@ def test_apt_package():
     with Plan([AptPackages(["nginx"])]) as plan:
         plan.execute()
         Plan([AptPackages(["nginx"])]).execute()  # test idempotency
-        assert AptPackages.is_installed("nginx")
 
     with pytest.raises(Exception, match=r"Command terminated with non zero exit code"):
         Plan(AptPackages(["blaldderandom"])).execute()

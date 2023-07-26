@@ -2,7 +2,7 @@ import inspect
 from typing import Callable
 
 
-class PlanElement:
+class Resource:
     def __post_init__(self):
         callerframerecord = inspect.stack()[2]  # 0
         self.location = callerframerecord.filename
@@ -21,6 +21,6 @@ class PlanElement:
         return action_list
 
     def on_change(self, callback: Callable):
-        """Execute callback if the element is changed"""
+        """Execute callback if the resource is changed"""
         self.on_change_callback = callback
         return self

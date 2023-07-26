@@ -8,8 +8,8 @@ Improvements:
   - Added coverage report (100% on this version)
   - Plan:
     - removed 'name' attribute
-    - added `PlanElement` class
-    - added one or list of Elements
+    - added `Resource` class
+    - added one or list of resources
     - rename .run() to .execute()
   - FileContent:
     - added support for search in the templates dir

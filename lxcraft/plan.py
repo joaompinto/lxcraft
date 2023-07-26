@@ -4,76 +4,63 @@ from typing import Callable
 
 from lxcraft.debug import debug
 
-from .plan_element import PlanElement
+from .resource import Resource
 
 
 @dataclass
 class Plan:
-    elements: PlanElement | list[PlanElement] = field(
-        default_factory=list[PlanElement]
-    )  # List of plan elements
+    resources: Resource | list[Resource] = field(
+        default_factory=list[Resource]
+    )  # List of plan resources
 
-    # Check if all the elements are based on PlanElement to avoid type errors
+    # Check if all the resources are based on Resource to avoid type errors
     def __post_init__(self):
-        debug("plan", "Created plan", self)
-        if not isinstance(self.elements, list):
-            self.elements = [self.elements]
-        assert self.elements, "Plan must have at least one element"
-        for element in self.elements:
+        if not isinstance(self.resources, list):
+            self.resources = [self.resources]
+        assert self.resources, "Plan must have at least one resource"
+        for resource in self.resources:
             assert isinstance(
-                element, PlanElement
-            ), f"{element} is not based on PlanElement"
+                resource, Resource
+            ), f"{resource} is not based on Resource"
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        for element in self.elements:
-            debug("destroy", "Destroying", element)
-            element.destroy()
+        for resource in self.resources:
+            debug("destroy", "__exit__ Destroying", resource)
+            resource.destroy()
 
-    def preview(self):
-        total_action_list: list[Callable] = []
+    def find_missing(self):
+        for resource in self.resources:
+            if not resource.is_created():
+                debug("missing", resource)
+                yield resource
 
-        for element in self.elements:
-            action_list = element.get_actions()
-            if not action_list:
-                debug("plan", "preview found no actions for", element)
-                continue
-            for action in action_list:
-                total_action_list.append(action)
+    def find_inconsistent(self):
+        for resource in self.resources:
+            if not resource.is_consistent():
+                yield resource
 
-            # Register on_change callback for the last action
-            on_change_callback = getattr(element, "on_change_callback", None)
-            if action and on_change_callback:
-                total_action_list.append(on_change_callback)
-            debug("plan", f"preview found {len(action_list)} actions")
-        return total_action_list
+    def try_and_point(self, action: Callable):
+        debug("action", "Trying to execute", action)
+        try:
+            action()
+        except Exception as e:
+            print(
+                "EXCEPTION related to ",
+                action.__self__.source_repr(),
+                file=sys.stderr,
+            )
+            raise e
 
     def execute(self):
-        """Execute all the actions required to materialize the elements"""
-        action_list = self.preview()
-        if not action_list:
-            return
+        """Execute all the actions required to create the resources
+        and bring them to a consistent state"""
+        for resource in self.find_missing():
+            self.try_and_point(resource.create)
 
-        for action in action_list:
-            debug("execute", action)
-            try:
-                action()
-            except Exception as e:
-                print(
-                    "EXCEPTION related to ",
-                    action.__self__.source_repr(),
-                    file=sys.stderr,
-                )
-                raise e
-
-        # run the preview to make sure everything is ok
-        post_run_preview = self.preview()
-        if post_run_preview:
-            print("Pending actions after run:", file=sys.stderr)
-            for action in post_run_preview:
-                print(" - ", action, file=sys.stderr)
-            raise Exception("Plan did not run successfully - check previous errors")
-
-        return post_run_preview
+        for resource in self.find_inconsistent():
+            debug("action", "recreate inconsistent", resource)
+            self.try_and_point(resource.destroy)
+            self.try_and_point(resource.create)
