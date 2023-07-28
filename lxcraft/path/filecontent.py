@@ -38,8 +38,7 @@ class FileContent(lxcraft.Resource):
 
     def is_consistent(self):
         return (
-            self.is_created()
-            and self.get_template_text() == Path(self.target_path).read_text()
+            self.get_template_text() == Path(self.target_path).read_text()
             and self.mode_matches()
             and self.owner_matches()
         )

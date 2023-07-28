@@ -30,6 +30,8 @@ Plan([
 In order to develop you must use Linux or WSL with docker.
 
 ```sh
-develop/docker-bash     # Enter the development docker instance
-just                    # Run the tests
+pip install invoke
+invoke docker
+invoke setup
+invoke test
 ```

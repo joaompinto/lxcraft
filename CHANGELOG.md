@@ -1,7 +1,7 @@
 # CHANGELOG.md
 
 
-## 0.0.4 (26 July 2023)
+## 0.0.5 (UNRELEASED)
 
 Improvements:
 

@@ -2,7 +2,7 @@ import sys
 from dataclasses import dataclass, field
 from typing import Callable
 
-import lxcraft
+from taglogger import tlog
 
 from .resource import Resource
 
@@ -26,11 +26,11 @@ class Plan:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         for resource in self.resources:
-            lxcraft.debug("destroy", "__exit__ Destroying", resource)
+            tlog("destroy", "__exit__ Destroying", resource)
             resource.destroy()  # type: ignore[attr-defined]
 
     def try_and_point(self, action: Callable):
-        lxcraft.debug("action", "Trying to execute", action)
+        tlog("action", "Trying to execute", action)
         try:
             action()
         except Exception as e:
@@ -46,11 +46,11 @@ class Plan:
         and bring them to a consistent state"""
         for resource in self.resources:
             if not resource.is_created():  # type: ignore[attr-defined]
-                lxcraft.debug("action", "Creating missing", resource)
+                tlog("action", "Creating missing", resource)
                 self.try_and_point(resource.create)  # type: ignore[attr-defined]
                 on_change_callback = getattr(resource, "on_change_callback", None)
                 if on_change_callback:
-                    lxcraft.debug("action", "on_change", resource, on_change_callback)
+                    tlog("action", "on_change", resource, on_change_callback)
                     on_change_callback()
             if not resource.is_consistent():  # type: ignore[attr-defined]
                 self.try_and_point(resource.destroy)  # type: ignore[attr-defined]
@@ -59,7 +59,7 @@ class Plan:
     def destroy(self):
         """Destroy all the resources"""
         for resource in self.resources:
-            lxcraft.debug("destroy", "Destroying all resources")
+            tlog("destroy", "Destroying all resources")
             for resource in self.resources:
                 if resource.is_created():  # type: ignore[attr-defined]
                     self.try_and_point(resource.destroy)  # type: ignore[attr-defined]

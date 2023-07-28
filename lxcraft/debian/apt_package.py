@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from subprocess import getstatusoutput
 
+from taglogger import tlog
+
 import lxcraft
 
 
@@ -35,5 +37,5 @@ class AptPackages(lxcraft.Resource):
             f" --show {package_name} | grep -q '^install ok installed$'"
         )
         rc, _ = getstatusoutput(command)
-        lxcraft.debug("command", command, f"# rc={rc}")
+        tlog("command", command, f"# rc={rc}")
         return rc == 0
