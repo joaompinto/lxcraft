@@ -138,3 +138,5 @@ dmypy.json
 cython_debug/
 
 lxcraft/version.py
+
+.coverage

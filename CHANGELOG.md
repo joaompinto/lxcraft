@@ -1,11 +1,10 @@
 # CHANGELOG.md
 
 
-## 0.0.5 (UNRELEASED)
+## 0.0.5 (31 July 2023)
 
 Improvements:
 
-  - Documentation:
-    - Added debug message documentation
+  - Replaced internal debug function with taglogger
   - Resources:
-    - Added the ability to setup on_change callbacks
+    - Directory() now supports owner and mode parameters

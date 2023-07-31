@@ -10,8 +10,8 @@ def docker(c):
 
 @task
 def setup(c):
-    print("Installing requirements...")
-    c.run("pip install -r requirements-dev.txt", hide=True)
+    print("Installing Python requirements...")
+    c.run("pip install -r requirements.txt -r requirements-dev.txt", hide=True)
 
 
 @task

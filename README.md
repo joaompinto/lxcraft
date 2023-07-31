@@ -27,11 +27,15 @@ Plan([
 
 ## How to develop
 
+### Requirements
+
+- Python 3.10+ is required.
+- Linux or WSL.
+
 In order to develop you must use Linux or WSL with docker.
 
 ```sh
-pip install invoke
-invoke docker
+python develop/docker-bash.py
 invoke setup
 invoke test
 ```

@@ -6,7 +6,8 @@
         "dist": true,
         ".pytest_cache": true,
         ".ruff_cache": true,
-        "lxcraft/version.py": true
+        "lxcraft/version.py": true,
+        ".coverage": true
     },
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": false,
